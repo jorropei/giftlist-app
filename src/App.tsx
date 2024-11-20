@@ -168,9 +168,16 @@ export function App() {
               <div className="text-center py-12 bg-gray-900/50 rounded-lg text-white">
                 <Gift className="h-16 w-16 text-gray-600 mx-auto mb-4" strokeWidth={1.5} />
                 <h3 className="text-xl font-semibold mb-2">{t('noPresents')}</h3>
-                <p className="text-gray-400">
+                <p className="text-gray-400 mb-8">
                   {t('startAdding')}
                 </p>
+                <button
+                  onClick={() => setShowAddForm(true)}
+                  className="button-primary mx-auto"
+                >
+                  <Plus className="h-5 w-5" />
+                  {t('add Gift')}
+                </button>
               </div>
             ) : (
               <PresentList
