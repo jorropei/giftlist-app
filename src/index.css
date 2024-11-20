@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base styles */
+html, 
+body, 
+#root {
+  height: 100%;
+  min-height: 100vh;
+  background-color: black;
+  color: white;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+/* Component styles */
+.glass-card {
+  background-color: rgba(31, 41, 55, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: #1a1d24;
+  border: 1px solid rgb(31, 41, 55);
+  border-radius: 0.5rem;
+  color: white;
+  transition: border-color 200ms;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: rgb(99, 102, 241);
+}
+
+.input-field::placeholder {
+  color: rgb(156, 163, 175);
+}
+
+.button-primary {
+  padding: 0.5rem 1.5rem;
+  background-color: rgb(99, 102, 241);
+  color: white;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background-color 200ms;
+}
+
+.button-primary:hover {
+  background-color: rgb(79, 82, 221);
+}
+
+/* Add these styles to your existing CSS */
+@font-face {
+  font-family: 'SF Pro Display';
+  src: local('SF Pro Display');
+  font-weight: 400 700;
+}
+
+/* Add this for better text rendering */
+h1, h2, h3, h4 {
+  text-rendering: optimizeLegibility;
+}

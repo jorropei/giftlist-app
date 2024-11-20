@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /lists/{listId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        // Allow members to update description
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['description', 'updatedAt'])) ||
+        // Allow creator to update everything
+        resource.data.createdBy == request.auth.uid
+      );
+      allow delete: if request.auth != null && resource.data.createdBy == request.auth.uid;
+    }
+
+    match /list_members/{memberId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid;
+      // Allow deletion if user is the list creator
+      allow delete: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        get(/databases/$(database)/documents/lists/$(resource.data.listId)).data.createdBy == request.auth.uid
+      );
+    }
+
+    match /presents/{presentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      // Allow deletion if user is the list creator
+      allow delete: if request.auth != null && (
+        resource.data.createdBy == request.auth.uid ||
+        get(/databases/$(database)/documents/lists/$(resource.data.listId)).data.createdBy == request.auth.uid
+      );
+    }
+  }
+}
