@@ -38,7 +38,7 @@ export const translations = {
     whoIsItFor: 'Who is it for?',
     notes: 'Notes',
     anyNotes: 'Any additional notes?',
-    addGift: 'Add Gift',
+    addGift: 'Add gift',
     viewProduct: 'View Product',
     buyIt: 'Buy it!',
     seeItem: 'See item',

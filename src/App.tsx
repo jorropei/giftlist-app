@@ -176,7 +176,7 @@ export function App() {
                   className="button-primary mx-auto"
                 >
                   <Plus className="h-5 w-5" />
-                  {t('add Gift')}
+                  {t('addGift')}
                 </button>
               </div>
             ) : (

@@ -4,7 +4,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { extractDomainFromUrl } from '../utils/urlUtils';
 import { useTranslation } from '../hooks/useTranslation';
-import { useAuthStore } from '../store/useAuthStore';
 import { useGiftStore } from '../store/useGiftStore';
 import type { Present } from '../types';
 
@@ -18,7 +17,6 @@ export function PresentCard({ present, onPurchaseToggle, onPriorityChange }: Pre
   const [imageError, setImageError] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { t } = useTranslation();
-  const { user } = useAuthStore();
   const { deletePresent, updatePresent } = useGiftStore();
 
   const {
@@ -56,19 +54,18 @@ export function PresentCard({ present, onPurchaseToggle, onPriorityChange }: Pre
           : 'border-gray-800 hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/10'
       } transition-all duration-300 relative`}
     >
-      {/* Image section */}
+      {/* Updated Image section */}
       <div className="h-32 mb-3 rounded-xl overflow-hidden relative bg-gray-800/50">
-        {(present.imageUrl && !imageError) ? (
-          <img
-            src={present.imageUrl}
-            alt={present.item}
-            className="w-full h-full object-contain bg-white"
-            onError={() => {
-              setImageError(true);
-              console.error('Failed to load image:', present.imageUrl);
-            }}
-            loading="lazy"
-          />
+        {brandLogoUrl ? (
+          <div className="w-full h-full flex items-center justify-center bg-white/5 backdrop-blur-sm">
+            <img
+              src={brandLogoUrl}
+              alt={domain}
+              className="h-20 w-20 object-contain"
+              onError={(e) => e.currentTarget.style.display = 'none'}
+              loading="lazy"
+            />
+          </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-900">
             <Gift className="h-10 w-10 text-gray-600" strokeWidth={1.5} />
@@ -87,18 +84,6 @@ export function PresentCard({ present, onPurchaseToggle, onPriorityChange }: Pre
             <Check className="h-4 w-4" />
           </button>
         </div>
-
-        {brandLogoUrl && (
-          <div className="absolute bottom-2 right-2">
-            <img
-              src={brandLogoUrl}
-              alt={domain}
-              className="h-6 w-6 rounded-full bg-white p-1"
-              onError={(e) => e.currentTarget.style.display = 'none'}
-              loading="lazy"
-            />
-          </div>
-        )}
       </div>
 
       {/* Content section */}
@@ -128,7 +113,7 @@ export function PresentCard({ present, onPurchaseToggle, onPriorityChange }: Pre
                   {t('notes')}
                 </label>
                 <textarea
-                  value={present.notes}
+                  value={present.notes || ''}
                   onChange={(e) => updatePresent(present.id, { notes: e.target.value })}
                   className="input-field"
                   placeholder={t('anyNotes')}
@@ -187,7 +172,7 @@ export function PresentCard({ present, onPurchaseToggle, onPriorityChange }: Pre
               <time>{new Date(present.createdAt).toLocaleDateString()}</time>
             </div>
             
-            {present.createdBy === user?.uid && !isEditing && (
+            {!isEditing && (
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsEditing(true)}
